@@ -1,5 +1,6 @@
 package view;
 
+import objectdata.Axes;
 import objectdata.Cube;
 import objectdata.Pyramid;
 import objectdata.Scene;
@@ -23,7 +24,7 @@ public class Canvas extends JFrame {
     Renderer3D renderer3D;
     Camera camera;
     private Mat4 model;
-    private int x = 400, y = 400, newX = 400, newY = 400;
+    private int x, y, newX, newY;
 
 
     public Canvas(int width, int height){
@@ -53,7 +54,7 @@ public class Canvas extends JFrame {
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         scene = new Scene();
-        scene.add(new Cube());
+        scene.add(new Axes());
         add(panel, BorderLayout.CENTER);
         pack();
         setVisible(true);
@@ -98,13 +99,25 @@ public class Canvas extends JFrame {
                  y = e.getY();
 
                  camera = camera.addAzimuth(-(x - newX) * Math.PI / 360);
-                 camera = camera.addZenith(-(y - newY) * Math.PI / 360); // TODO: nefunguje tak jak ma, jebne to nahoru hned po kliknuti
+                 camera = camera.addZenith(-(y - newY) * Math.PI / 360); // TODO: nefunguje tak jak ma, hodí to nahoru hned po kliknuti
 
                  draw();
              }
         });
 
-
+        panel.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                Mat4 scale;
+                if (e.getWheelRotation() < 0) {
+                    scale = new Mat4Scale(1.05, 1.05, 1.05);
+                } else {
+                    scale = new Mat4Scale(0.95, 0.95, 0.95);
+                }
+                model = model.mul(scale);
+                draw();
+            }
+        });
     }
 
     private double azimuthToOrigin(Vec3D observerPosition){
@@ -119,7 +132,6 @@ public class Canvas extends JFrame {
         Vec3D viewVector = observerPosition.opposite();
         return viewVector.normalized().flatMap(view -> view.withZ(0).normalized().map(projetion -> {
             double angle = Math.acos(view.dot(projetion));
-            System.out.println(angle);
             return (view.getZ() > 0 ? angle : 2 * Math.PI - angle );
         })).orElse(0.0);
     }

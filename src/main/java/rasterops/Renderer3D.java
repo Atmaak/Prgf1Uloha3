@@ -66,7 +66,7 @@ public class Renderer3D {
                 int y2 = (int) ((1 - vectorB.getY()) * (img.getHeight() - 1) / 2);
 
                 Graphics g = img.getGraphics();
-                g.setColor(new Color(object.getColor()));
+                g.setColor(new Color(object.getColor(i / 2)));
                 g.drawLine(x1, y1, x2, y2);
             }
         }

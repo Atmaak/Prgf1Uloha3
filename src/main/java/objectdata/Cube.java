@@ -36,5 +36,7 @@ public class Cube extends Object3D {
         indexBuffer.add(6);
         indexBuffer.add(3);
         indexBuffer.add(7);
+
+        colors.add(0x00FF00);
     }
 }

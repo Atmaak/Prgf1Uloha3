@@ -27,6 +27,6 @@ public class Pyramid extends Object3D {
         vertexBuffer.add(new Point3D(2, 2, -1));     //3
         vertexBuffer.add(new Point3D(2, -2, -1));    //4
 
-        this.setColor(0x00FFFF);
+        colors.add(0x00FFFF);
     }
 }
