@@ -4,62 +4,73 @@ import objectdata.Object3D;
 import objectdata.Scene;
 import raster.Raster;
 import rasterize.Liner;
-import transforms.Mat4;
-import transforms.Point3D;
-import transforms.Vec2D;
+import transforms.*;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 
 public class Renderer3D {
-    public void renderScene(Raster raster, Scene scene, Mat4 matView, Mat4 matProjection, Liner liner, int color){
+    private Mat4 model;
+
+    public void renderScene(Raster raster, Scene scene, Mat4 matView, Mat4 matProjection, Mat4 model) {
         for (Object3D object : scene.getObjects()) {
-            final Mat4 objectTransformation = new Mat4();
-            renderObject(raster, object, new Mat4(), liner, color);
+            Mat4 objectTransformation = matView.mul(object.getModelMat()).mul(matProjection);
+            draw(object, model, raster, matProjection, matView);
         }
     }
 
-    private void renderObject(Raster raster, Object3D object, Mat4 transformation, Liner liner, int color){
-        final List<Point3D> transformedVertices = object.getVertexBuffer().stream().map(p -> p.mul(transformation)).toList();
+    private Boolean cutable(Point3D point){
+        return -point.getW() <= point.getY() && -point.getW() <= point.getX() && point.getY() <= point.getW() && point.getX() <= point.getW() && point.getZ() >= 0 && point.getZ() <= point.getW();
+    }
 
-        for (int i = 0; i < object.getIndexBuffer().size(); i += 2) {
-            final Point3D first = transformedVertices.get(i);
-            final Point3D second = transformedVertices.get(i + 1);
+    public void draw(Object3D object, Mat4 model, Raster raster, Mat4 projection, Mat4 view) {
+        BufferedImage img  = raster.getImg();
 
-            if( first.getX() < -first.getW() || first.getX() > first.getW() || second.getX() < -second.getW() || second.getX() > second.getW() ||
-                first.getY() < -first.getW() || first.getY() > first.getW() || second.getY() < -second.getW() || second.getY() > second.getW() ||
-                first.getZ() < 0 || first.getZ() > first.getW()
-            ){
-                continue;
-            }
-
-            if( second.getX() < -second.getW() || second.getX() > second.getW() || second.getX() < -second.getW() || second.getX() > second.getW() ||
-                    second.getY() < -second.getW() || second.getY() > second.getW() || second.getY() < -second.getW() || second.getY() > second.getW() ||
-                    second.getZ() < 0 || second.getZ() > second.getW()
-            ){
-                continue;
-            }
-
-            first.dehomog().ifPresent(p1 -> {
-                second.dehomog().ifPresent(p2 -> {
-
-                    Vec2D first2D = p1.ignoreZ();
-                    Vec2D second2D = p2.ignoreZ();
-
-                    Vec2D firstInViewSpace = toViewSpace(raster, first2D);
-                    Vec2D secondInViewSpace = toViewSpace(raster, second2D);
-
-                    liner.draw(raster, firstInViewSpace, secondInViewSpace, color);
-                });
-            });
+        if (object.isTransferable()) {
+            this.model = object.getTransMat().mul(model);
+        } else {
+            this.model = new Mat4Identity();
         }
 
-    }
+        final Mat4 finalTransform = this.model.mul(view).mul(projection);
+        List<Integer> indexs = object.getIndexBuffer();
 
-    private Vec2D toViewSpace(Raster raster, Vec2D point){
-        return new Vec2D(point.getX() + raster.getWidth() / 2, -point.getY() + raster.getHeight() / 2);
-    }
+        for (int i = 0; i < indexs.size(); i += 2) {
+            int ibA = object.getIndexBuffer().get(i);
+            int ibB = object.getIndexBuffer().get(i + 1);
 
+            Point3D vbA = object.getVertexBuffer().get(ibA);
+            Point3D vbB = object.getVertexBuffer().get(ibB);
+
+            vbA = vbA.mul(finalTransform);
+            vbB = vbB.mul(finalTransform);
+
+            Vec3D vectorA = null;
+            Vec3D vectorB = null;
+
+            if (cutable(vbA) && cutable(vbB)){
+                if (vbA.dehomog().isPresent()) {
+                    vectorA = vbA.dehomog().get();
+                }
+
+                if (vbA.dehomog().isPresent()) {
+                    vectorB = vbB.dehomog().get();
+                }
+
+                int x1 = (int) ((1 + vectorA.getX()) * (img.getWidth() - 1) / 2);
+                int y1 = (int) ((1 - vectorA.getY()) * (img.getHeight() - 1) / 2);
+
+                int x2 = (int) ((1 + vectorB.getX()) * (img.getWidth() - 1) / 2);
+                int y2 = (int) ((1 - vectorB.getY()) * (img.getHeight() - 1) / 2);
+
+                Graphics g = img.getGraphics();
+                g.setColor(new Color(object.getColor()));
+                g.drawLine(x1, y1, x2, y2);
+            }
+        }
+    }
 
 }
 

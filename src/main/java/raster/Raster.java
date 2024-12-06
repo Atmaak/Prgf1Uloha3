@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public class Raster  {
 
     private BufferedImage img;
-    private int color;
+    private int color = 0xFF0000;
 
     public BufferedImage getImg() {
         return img;
@@ -45,5 +45,4 @@ public class Raster  {
     public int getHeight() {
         return img.getHeight();
     }
-
 }

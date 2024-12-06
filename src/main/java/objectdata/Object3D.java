@@ -2,21 +2,19 @@ package objectdata;
 
 import transforms.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-//represents a general object in 3D space
 public class Object3D {
 
-    private final List<Point3D> vertexBuffer;
-    private final List<Integer> indexBuffer;
-    private final Mat4 modelMat;
+    final ArrayList<Point3D> vertexBuffer = new ArrayList<>();
+    final ArrayList<Integer> indexBuffer = new ArrayList<>();
+    private final Mat4 modelMat = new Mat4();
+    private boolean transferable = true;
+    private Mat4 transMat = new Mat4Identity();
 
-    public Object3D(List<Point3D> vertexBuffer, List<Integer> indexBuffer, Mat4 modelMat) {
-        this.vertexBuffer = vertexBuffer;
-        this.indexBuffer = indexBuffer;
-        this.modelMat = modelMat;
-    }
+    private int color = 0xFF0000;
 
     public List<Point3D> getVertexBuffer() {
         return vertexBuffer;
@@ -28,5 +26,21 @@ public class Object3D {
 
     public Mat4 getModelMat() {
         return modelMat;
+    }
+
+    public boolean isTransferable() {
+        return transferable;
+    }
+
+    public Mat4 getTransMat() {
+        return transMat;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getColor() {
+        return color;
     }
 }
