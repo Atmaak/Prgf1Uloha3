@@ -1,11 +1,8 @@
 package view;
 
-import objectdata.Axes;
-import objectdata.Cube;
-import objectdata.Pyramid;
-import objectdata.Scene;
+import controls.Controls;
+import objectdata.*;
 import raster.Raster;
-import rasterize.Liner;
 import rasterops.Renderer3D;
 import transforms.*;
 
@@ -25,13 +22,14 @@ public class Canvas extends JFrame {
     Camera camera;
     private Mat4 model;
     private int x, y, newX, newY;
-
+    private Controls controls;
 
     public Canvas(int width, int height){
         this.width = width;
         this.height = height;
         init();
         initListeners();
+        initButtons();
     }
 
     private void init(){
@@ -54,8 +52,9 @@ public class Canvas extends JFrame {
         panel.setFocusable(true);
         panel.requestFocusInWindow();
         scene = new Scene();
-        scene.add(new Axes());
         add(panel, BorderLayout.CENTER);
+        controls = new Controls();
+        panel.add(controls.getControls(), BorderLayout.PAGE_START);
         pack();
         setVisible(true);
         draw();
@@ -77,6 +76,12 @@ public class Canvas extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_D){
                     camera = camera.right(0.5);
                 }
+                if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                    camera = camera.up(0.5);
+                }
+                if(e.getKeyCode() == KeyEvent.VK_SHIFT){
+                    camera = camera.down(0.5);
+                }
                 draw();
             }
         });
@@ -93,15 +98,15 @@ public class Canvas extends JFrame {
         panel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
              public void mouseDragged(MouseEvent e) {
-                 newX = x;
-                 newY = y;
-                 x = e.getX();
-                 y = e.getY();
+                newX = x;
+                newY = y;
+                x = e.getX();
+                y = e.getY();
 
-                 camera = camera.addAzimuth(-(x - newX) * Math.PI / 360);
-                 camera = camera.addZenith(-(y - newY) * Math.PI / 360); // TODO: nefunguje tak jak ma, hodí to nahoru hned po kliknuti
+                camera = camera.addAzimuth(-(x - newX) * Math.PI / 360);
+                camera = camera.addZenith(-(y - newY) * Math.PI / 360); // TODO: nefunguje tak jak ma, hodí to nahoru hned po kliknuti
 
-                 draw();
+                draw();
              }
         });
 
@@ -118,6 +123,16 @@ public class Canvas extends JFrame {
                 draw();
             }
         });
+    }
+
+    private void initButtons(){
+        controls.getReset().addActionListener(e -> reset());
+        controls.getCube().addActionListener(e -> addObject(new Cube()));
+        controls.getPyramid().addActionListener(e -> addObject(new Pyramid()));
+        controls.getGrid().addActionListener(e -> addObject(new Grid()));
+        controls.getBezier().addActionListener(e -> addObject(new BicubicGrid(Cubic.BEZIER, 0x458800)));
+        controls.getFerguson().addActionListener(e -> addObject(new BicubicGrid(Cubic.FERGUSON, 0x450088)));
+        controls.getCoons().addActionListener(e -> addObject(new BicubicGrid(Cubic.COONS, 0x004588)));
     }
 
     private double azimuthToOrigin(Vec3D observerPosition){
@@ -138,12 +153,21 @@ public class Canvas extends JFrame {
 
     public void draw() {
         raster.clear();
-        scene.add(new Pyramid());
         renderer3D.renderScene(raster, scene, camera.getViewMatrix(), projection, this.model);
         panel.repaint();
     }
 
     public void start(){
         raster.clear();
+    }
+
+    public void reset(){
+        scene.clear();
+        draw();
+    }
+
+    public void addObject(Object3D object){
+        scene.add(object);
+        draw();
     }
 }

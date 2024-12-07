@@ -4,7 +4,6 @@ import raster.Raster;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Panel extends JPanel {
     Raster raster;

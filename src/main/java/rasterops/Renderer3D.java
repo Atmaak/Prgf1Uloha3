@@ -3,7 +3,6 @@ package rasterops;
 import objectdata.Object3D;
 import objectdata.Scene;
 import raster.Raster;
-import rasterize.Liner;
 import transforms.*;
 
 import java.awt.*;
@@ -16,7 +15,6 @@ public class Renderer3D {
 
     public void renderScene(Raster raster, Scene scene, Mat4 matView, Mat4 matProjection, Mat4 model) {
         for (Object3D object : scene.getObjects()) {
-            Mat4 objectTransformation = matView.mul(object.getModelMat()).mul(matProjection);
             draw(object, model, raster, matProjection, matView);
         }
     }
