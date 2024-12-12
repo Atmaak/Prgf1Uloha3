@@ -82,6 +82,29 @@ public class Canvas extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_SHIFT){
                     camera = camera.down(0.5);
                 }
+                if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+                    model = model.mul(new Mat4Rot(Math.toRadians(45), new Vec3D(1, 0, 0)));
+                }
+                if(e.getKeyCode() == KeyEvent.VK_LEFT){
+                    model = model.mul(new Mat4Rot(Math.toRadians(-45), new Vec3D(1, 0, 0)));
+                }
+                if(e.getKeyCode() == KeyEvent.VK_UP){
+                    model = model.mul(new Mat4Rot(Math.toRadians(45), new Vec3D(0, 1, 0)));
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN){
+                    model = model.mul(new Mat4Rot(Math.toRadians(-45), new Vec3D(0, 1, 0)));
+                }
+                if(e.getKeyCode() == KeyEvent.VK_P){
+//                    double alpha = Math.toRadians(45);  // 45 degrees vertical FOV in radians
+//                    double aspectRatio = 16.0 / 9.0;    // Example aspect ratio (width/height)
+//                    double nearPlane = 0.1;             // Distance to the near clipping plane
+//                    double farPlane = 100.0;            // Distance to the far clipping plane
+//
+//// Create the perspective matrix
+//                    Mat4PerspRH perspMatrix = new Mat4PerspRH(alpha, aspectRatio, nearPlane, farPlane);
+//
+//                    camera = new Camera()
+                }
                 draw();
             }
         });
@@ -91,7 +114,6 @@ public class Canvas extends JFrame {
             public void mousePressed(MouseEvent e) {
                 x = e.getX();
                 y = e.getY();
-                draw();
             }
         });
 
@@ -100,6 +122,7 @@ public class Canvas extends JFrame {
              public void mouseDragged(MouseEvent e) {
                 newX = x;
                 newY = y;
+
                 x = e.getX();
                 y = e.getY();
 
@@ -147,7 +170,7 @@ public class Canvas extends JFrame {
         Vec3D viewVector = observerPosition.opposite();
         return viewVector.normalized().flatMap(view -> view.withZ(0).normalized().map(projetion -> {
             double angle = Math.acos(view.dot(projetion));
-            return (view.getZ() > 0 ? angle : 2 * Math.PI - angle );
+            return (view.getZ() > 0 ? angle : - angle);
         })).orElse(0.0);
     }
 
@@ -158,7 +181,7 @@ public class Canvas extends JFrame {
     }
 
     public void start(){
-        raster.clear();
+        raster.clear(); draw();
     }
 
     public void reset(){
