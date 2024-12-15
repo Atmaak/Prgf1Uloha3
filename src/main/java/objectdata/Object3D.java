@@ -13,9 +13,9 @@ public class Object3D {
     boolean transferable = true;
     Mat4 transMat = new Mat4Identity();
 
-    public Object3D(Mat4 model, List<Integer> vertexBuffer, Mat4 transformation ) {
-
-    }
+//    public Object3D(Mat4 model, List<Integer> vertexBuffer, Mat4 transformation ) {
+//
+//    }
 
     ArrayList<Integer> colors = new ArrayList<>();
 
