@@ -57,17 +57,17 @@ public class Controls {
         return pyramid;
     }
 
-    public JButton getBezier() {
-        return bezier;
-    }
+//    public JButton getBezier() {
+//        return bezier;
+//    }
 
-    public JButton getFerguson() {
-        return ferguson;
-    }
+//    public JButton getFerguson() {
+//        return ferguson;
+//    }
 
-    public JButton getCoons(){
-        return coons;
-    }
+//    public JButton getCoons(){
+//        return coons;
+//    }
 
     public JButton getFillable() { return fillable; }
 }

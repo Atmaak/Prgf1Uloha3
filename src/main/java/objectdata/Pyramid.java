@@ -35,6 +35,9 @@
 
 package objectdata;
 
+import structure.Part;
+import structure.TopologyType;
+import structure.Vertex;
 import transforms.Col;
 import transforms.Point3D;
 
@@ -51,11 +54,11 @@ public class Pyramid extends Object3D {
         indexBuffer.add(1); indexBuffer.add(3); indexBuffer.add(4); // Side triangle 2
 
         // Define the vertices for the pyramid
-        vertexBuffer.add(new Point3D(0, 0, 5));     // 0 - Apex
-        vertexBuffer.add(new Point3D(-2, -2, 0));   // 1 - Base corner 1
-        vertexBuffer.add(new Point3D(-2, 2, 0));    // 2 - Base corner 2
-        vertexBuffer.add(new Point3D(2, 2, 0));     // 3 - Base corner 3
-        vertexBuffer.add(new Point3D(2, -2, 0));    // 4 - Base corner 4
+        vertexBuffer.add(new Vertex(new Point3D(0, 0, 5), new Col(0xff0000)));     // 0 - Apex
+        vertexBuffer.add(new Vertex(new Point3D(-2, -2, 0), new Col(0xff0000)));   // 1 - Base corner 1
+        vertexBuffer.add(new Vertex(new Point3D(-2, 2, 0), new Col(0xff0000)));    // 2 - Base corner 2
+        vertexBuffer.add(new Vertex(new Point3D(2, 2, 0), new Col(0xff0000)));     // 3 - Base corner 3
+        vertexBuffer.add(new Vertex(new Point3D(2, -2, 0), new Col(0xff0000)));    // 4 - Base corner 4
 
         // Define the color for the pyramid
         colors.add(new Col(0x00FFFF));

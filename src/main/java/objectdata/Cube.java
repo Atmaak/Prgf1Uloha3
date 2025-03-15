@@ -1,4 +1,7 @@
 package objectdata;
+import structure.Part;
+import structure.TopologyType;
+import structure.Vertex;
 import transforms.Col;
 import transforms.Point3D;
 
@@ -8,14 +11,14 @@ import java.util.List;
 public class Cube extends Object3D {
     public Cube() {
         this.fillable = true;
-        vertexBuffer.add(new Point3D(1, 0, 0));
-        vertexBuffer.add(new Point3D(1, 1, 0));
-        vertexBuffer.add(new Point3D(0, 1, 0));
-        vertexBuffer.add(new Point3D(0, 0, 0));
-        vertexBuffer.add(new Point3D(1, 0, 1));
-        vertexBuffer.add(new Point3D(1, 1, 1));
-        vertexBuffer.add(new Point3D(0, 1, 1));
-        vertexBuffer.add(new Point3D(0, 0, 1));
+        vertexBuffer.add(new Vertex(new Point3D(1, 0, 0), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(1, 1, 0), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(0, 1, 0), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(0, 0, 0), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(1, 0, 1), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(1, 1, 1), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(0, 1, 1), new Col(0xFF00FF)));
+        vertexBuffer.add(new Vertex(new Point3D(0, 0, 1), new Col(0xFF00FF)));
 
         colors.add(new Col(0xFF00FF));
     }

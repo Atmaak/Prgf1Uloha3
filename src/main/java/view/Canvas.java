@@ -3,14 +3,13 @@ package view;
 import controls.Controls;
 import objectdata.*;
 import raster.Raster;
-import rasterops.Renderer3D;
-import rasterops.ZBuffer;
+import rasterizer.Renderer3D;
+import raster.ZBuffer;
 import transforms.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Canvas extends JFrame {
     int width, height;
@@ -52,7 +51,7 @@ public class Canvas extends JFrame {
         camera = new Camera(observerPosition, azimuthToOrigin(observerPosition), zenithToOrigin(observerPosition), 1, true);
 
         zbuffer = new ZBuffer(raster);
-        renderer3D = new Renderer3D(zbuffer);
+        renderer3D = new Renderer3D(zbuffer, raster);
         panel = new Panel(raster);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
@@ -146,9 +145,9 @@ public class Canvas extends JFrame {
         controls.getReset().addActionListener(e -> reset());
         controls.getCube().addActionListener(e -> addObject(new Cube()));
         controls.getPyramid().addActionListener(e -> addObject(new Pyramid()));
-        controls.getBezier().addActionListener(e -> addObject(new BicubicGrid(Cubic.BEZIER, 0x458800)));
-        controls.getFerguson().addActionListener(e -> addObject(new BicubicGrid(Cubic.FERGUSON, 0x450088)));
-        controls.getCoons().addActionListener(e -> addObject(new BicubicGrid(Cubic.COONS, 0x004588)));
+//        controls.getBezier().addActionListener(e -> addObject(new BicubicGrid(Cubic.BEZIER, 0x458800)));
+//        controls.getFerguson().addActionListener(e -> addObject(new BicubicGrid(Cubic.FERGUSON, 0x450088)));
+//        controls.getCoons().addActionListener(e -> addObject(new BicubicGrid(Cubic.COONS, 0x004588)));
         controls.getFillable().addActionListener(e -> setFillable());
     }
 
@@ -186,7 +185,7 @@ public class Canvas extends JFrame {
     public void draw() {
         raster.clear();
         zbuffer.clearZBuffer();
-        renderer3D.renderScene(raster, scene, camera.getViewMatrix(), projection, this.model);
+        renderer3D.renderScene(raster, scene, camera.getViewMatrix(), projection, this.model, true);
         panel.repaint();
     }
 

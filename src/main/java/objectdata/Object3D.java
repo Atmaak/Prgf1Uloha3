@@ -1,17 +1,24 @@
 package objectdata;
 
-import transforms.*;
+import shader.Shader;
+import structure.Part;
+import structure.Vertex;
+import transforms.Col;
+import transforms.Mat4;
+import transforms.Mat4Identity;
+import transforms.Point3D;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Object3D {
-    final ArrayList<Point3D> vertexBuffer = new ArrayList<>();
+    final ArrayList<Vertex> vertexBuffer = new ArrayList<>();
     final ArrayList<Integer> indexBuffer = new ArrayList<>();
     final ArrayList<Part> partBuffer = new ArrayList<Part>();
     boolean fillable = false;
     boolean filled = false;
+    Shader shader;
 
     final Mat4 modelMat = new Mat4();
     boolean transferable = true;
@@ -19,7 +26,7 @@ public class Object3D {
 
     ArrayList<Col> colors = new ArrayList<>();
 
-    public List<Point3D> getVertexBuffer() {
+    public List<Vertex> getVertexBuffer() {
         return vertexBuffer;
     }
 
@@ -64,5 +71,13 @@ public class Object3D {
 
     public void setFilled(boolean filled) {
         this.filled = filled;
+    }
+
+    public void setShader(Shader shader) {
+        this.shader = shader;
+    }
+
+    public Shader getShader() {
+        return shader;
     }
 }
