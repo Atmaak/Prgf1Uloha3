@@ -10,6 +10,7 @@ import transforms.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Canvas extends JFrame {
     int width, height;
@@ -25,6 +26,7 @@ public class Canvas extends JFrame {
     private Mat4 model;
     private int x, y, newX, newY;
     private Controls controls;
+    private boolean fillable = false;
 
     public Canvas(int width, int height){
         this.width = width;
@@ -144,10 +146,25 @@ public class Canvas extends JFrame {
         controls.getReset().addActionListener(e -> reset());
         controls.getCube().addActionListener(e -> addObject(new Cube()));
         controls.getPyramid().addActionListener(e -> addObject(new Pyramid()));
-        controls.getGrid().addActionListener(e -> addObject(new Grid()));
         controls.getBezier().addActionListener(e -> addObject(new BicubicGrid(Cubic.BEZIER, 0x458800)));
         controls.getFerguson().addActionListener(e -> addObject(new BicubicGrid(Cubic.FERGUSON, 0x450088)));
         controls.getCoons().addActionListener(e -> addObject(new BicubicGrid(Cubic.COONS, 0x004588)));
+        controls.getFillable().addActionListener(e -> setFillable());
+    }
+
+    private void setFillable(){
+        fillable = !fillable;
+        Scene newScene = new Scene();
+        for (Object3D obj : scene.getObjects()) {
+            if(obj.isFillable()){
+                obj.setFilled(fillable);
+            }
+            obj.setFillable(fillable);
+            newScene.add(obj);
+        }
+        scene = newScene;
+        draw();
+        System.out.println(fillable);
     }
 
     private double azimuthToOrigin(Vec3D observerPosition){
@@ -169,16 +186,6 @@ public class Canvas extends JFrame {
     public void draw() {
         raster.clear();
         zbuffer.clearZBuffer();
-        scene.add(new Cube(
-            new Point3D(1.5, 0, 0),
-            new Point3D(1.5, 1, 0),
-            new Point3D(0.5, 1, 0),
-            new Point3D(0.5, 0, 0),
-            new Point3D(1.5, 0, 1),
-            new Point3D(1.5, 1, 1),
-            new Point3D(0.5, 1, 1),
-            new Point3D(0.5, 0, 1)
-        ));
         renderer3D.renderScene(raster, scene, camera.getViewMatrix(), projection, this.model);
         panel.repaint();
     }
@@ -193,6 +200,9 @@ public class Canvas extends JFrame {
     }
 
     public void addObject(Object3D object){
+        if(object.isFillable()){
+            object.setFilled(fillable);
+        }
         scene.add(object);
         draw();
     }

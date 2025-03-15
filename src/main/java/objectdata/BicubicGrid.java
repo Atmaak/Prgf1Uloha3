@@ -13,7 +13,6 @@ public class BicubicGrid extends Object3D {
         colors.add(new Col(color));
         gridType = type;
 
-
         Point3D[] points;
         points = new Point3D[]{
             new Point3D(1, 1, 0),

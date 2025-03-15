@@ -11,6 +11,7 @@ public class Object3D {
     final ArrayList<Integer> indexBuffer = new ArrayList<>();
     final ArrayList<Part> partBuffer = new ArrayList<Part>();
     boolean fillable = false;
+    boolean filled = false;
 
     final Mat4 modelMat = new Mat4();
     boolean transferable = true;
@@ -51,5 +52,17 @@ public class Object3D {
 
     public boolean isFillable() {
         return fillable;
+    }
+
+    public void setFillable(boolean fillable) {
+        this.fillable = fillable;
+    }
+
+    public boolean isFilled() {
+        return filled;
+    }
+
+    public void setFilled(boolean filled) {
+        this.filled = filled;
     }
 }

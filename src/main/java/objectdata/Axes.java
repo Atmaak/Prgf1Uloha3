@@ -12,7 +12,6 @@ public class Axes extends Object3D {
         indexBuffer.add(0);
         indexBuffer.add(3);
 
-
         vertexBuffer.add(new Point3D(0, 0, 0)); //0
         vertexBuffer.add(new Point3D(1, 0, 0)); //1
         vertexBuffer.add(new Point3D(0, 1, 0)); //2

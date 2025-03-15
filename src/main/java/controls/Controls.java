@@ -8,10 +8,10 @@ public class Controls {
     private JButton reset;
     private JButton cube;
     private JButton pyramid;
-    private JButton grid;
     private JButton bezier;
     private JButton ferguson;
     private JButton coons;
+    private JButton fillable;
 
     public Controls() {
         controls = new JToolBar();
@@ -19,26 +19,26 @@ public class Controls {
         reset = new JButton("Reset");
         cube = new JButton("Cube");
         pyramid = new JButton("Pyramid");
-        grid = new JButton("Grid");
         bezier = new JButton("Bezier");
         ferguson = new JButton("Ferguson");
         coons = new JButton("Coons");
+        fillable = new JButton("Fillable");
 
         controls.add(reset);
         controls.add(cube);
         controls.add(pyramid);
-        controls.add(grid);
         controls.add(bezier);
         controls.add(ferguson);
         controls.add(coons);
+        controls.add(fillable);
 
         reset.setFocusable(false);
         cube.setFocusable(false);
         pyramid.setFocusable(false);
-        grid.setFocusable(false);
         bezier.setFocusable(false);
         ferguson.setFocusable(false);
         coons.setFocusable(false);
+        fillable.setFocusable(false);
     }
 
     public JToolBar getControls() {
@@ -57,10 +57,6 @@ public class Controls {
         return pyramid;
     }
 
-    public JButton getGrid() {
-        return grid;
-    }
-
     public JButton getBezier() {
         return bezier;
     }
@@ -72,4 +68,6 @@ public class Controls {
     public JButton getCoons(){
         return coons;
     }
+
+    public JButton getFillable() { return fillable; }
 }
