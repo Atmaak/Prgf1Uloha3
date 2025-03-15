@@ -4,6 +4,7 @@ import controls.Controls;
 import objectdata.*;
 import raster.Raster;
 import rasterops.Renderer3D;
+import rasterops.ZBuffer;
 import transforms.*;
 
 import javax.swing.*;
@@ -20,6 +21,7 @@ public class Canvas extends JFrame {
     Scene scene;
     Renderer3D renderer3D;
     Camera camera;
+    ZBuffer zbuffer;
     private Mat4 model;
     private int x, y, newX, newY;
     private Controls controls;
@@ -47,7 +49,8 @@ public class Canvas extends JFrame {
 
         camera = new Camera(observerPosition, azimuthToOrigin(observerPosition), zenithToOrigin(observerPosition), 1, true);
 
-        renderer3D = new Renderer3D();
+        zbuffer = new ZBuffer(raster);
+        renderer3D = new Renderer3D(zbuffer);
         panel = new Panel(raster);
         panel.setFocusable(true);
         panel.requestFocusInWindow();
@@ -94,17 +97,6 @@ public class Canvas extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_DOWN){
                     model = model.mul(new Mat4Rot(Math.toRadians(-45), new Vec3D(0, 1, 0)));
                 }
-                if(e.getKeyCode() == KeyEvent.VK_P){
-//                    double alpha = Math.toRadians(45);  // 45 degrees vertical FOV in radians
-//                    double aspectRatio = 16.0 / 9.0;    // Example aspect ratio (width/height)
-//                    double nearPlane = 0.1;             // Distance to the near clipping plane
-//                    double farPlane = 100.0;            // Distance to the far clipping plane
-//
-//// Create the perspective matrix
-//                    Mat4PerspRH perspMatrix = new Mat4PerspRH(alpha, aspectRatio, nearPlane, farPlane);
-//
-//                    camera = new Camera()
-                }
                 draw();
             }
         });
@@ -127,7 +119,7 @@ public class Canvas extends JFrame {
                 y = e.getY();
 
                 camera = camera.addAzimuth(-(x - newX) * Math.PI / 360);
-                camera = camera.addZenith(-(y - newY) * Math.PI / 360); // TODO: nefunguje tak jak ma, hodí to nahoru hned po kliknuti
+                camera = camera.addZenith(-(y - newY) * Math.PI / 360);
 
                 draw();
              }
@@ -176,6 +168,17 @@ public class Canvas extends JFrame {
 
     public void draw() {
         raster.clear();
+        zbuffer.clearZBuffer();
+        scene.add(new Cube(
+            new Point3D(1.5, 0, 0),
+            new Point3D(1.5, 1, 0),
+            new Point3D(0.5, 1, 0),
+            new Point3D(0.5, 0, 0),
+            new Point3D(1.5, 0, 1),
+            new Point3D(1.5, 1, 1),
+            new Point3D(0.5, 1, 1),
+            new Point3D(0.5, 0, 1)
+        ));
         renderer3D.renderScene(raster, scene, camera.getViewMatrix(), projection, this.model);
         panel.repaint();
     }

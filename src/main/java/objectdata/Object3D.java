@@ -9,13 +9,11 @@ import java.util.List;
 public class Object3D {
     final ArrayList<Point3D> vertexBuffer = new ArrayList<>();
     final ArrayList<Integer> indexBuffer = new ArrayList<>();
+    final ArrayList<Part> partBuffer = new ArrayList<Part>();
+
     final Mat4 modelMat = new Mat4();
     boolean transferable = true;
     Mat4 transMat = new Mat4Identity();
-
-//    public Object3D(Mat4 model, List<Integer> vertexBuffer, Mat4 transformation ) {
-//
-//    }
 
     ArrayList<Integer> colors = new ArrayList<>();
 
@@ -25,6 +23,10 @@ public class Object3D {
 
     public List<Integer> getIndexBuffer() {
         return indexBuffer;
+    }
+
+    public ArrayList<Part> getPartBuffer() {
+        return partBuffer;
     }
 
     public Mat4 getModelMat() {
