@@ -1,5 +1,6 @@
 package objectdata;
 
+import transforms.Col;
 import transforms.Point3D;
 
 public class Pyramid extends Object3D {
@@ -28,6 +29,6 @@ public class Pyramid extends Object3D {
         vertexBuffer.add(new Point3D(2, -2, 0));    //4
 
 
-        colors.add(0x00FFFF);
+        colors.add(new Col(0x00FFFF));
     }
 }

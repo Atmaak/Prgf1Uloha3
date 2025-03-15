@@ -1,5 +1,6 @@
 package objectdata;
 import transforms.Bicubic;
+import transforms.Col;
 import transforms.Mat4;
 import transforms.Point3D;
 
@@ -9,7 +10,7 @@ public class BicubicGrid extends Object3D {
     private Mat4 gridType;
 
     public BicubicGrid(Mat4 type, int color) {
-        colors.add(color);
+        colors.add(new Col(color));
         gridType = type;
 
 
